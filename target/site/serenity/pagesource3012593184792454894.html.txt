@@ -1,0 +1,658 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><!--
+Product:        PHPTRAVELS
+Copyright:      2016 @ phptravels.com
+License:        http://phptravels.com/licenses
+Purchase:       http://phptravels.com/order
+--><head>
+<meta charset="utf-8" />
+<title>Booking Management</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="author" content="PHPTRAVELS" />
+<base href="http://www.phptravels.net/" />
+<script>var base_url = 'http://www.phptravels.net/'; </script>
+<!-- Pace -->
+<script src="http://www.phptravels.net/assets/include/pace/pace.min.js"></script>
+<link href="http://www.phptravels.net/assets/include/pace/dataurl.css" rel="stylesheet" />
+<!-- Pace -->
+
+<link rel="shortcut icon" href="http://www.phptravels.net/uploads/global/favicon.png" />
+<link href="http://www.phptravels.net/assets/include/loading/loading.css" rel="stylesheet" />
+<link href="http://www.phptravels.net/assets/css/style.css" rel="stylesheet" />
+<link href="http://www.phptravels.net/assets/css/admin.css" rel="stylesheet" />
+<link href="http://www.phptravels.net/assets/css/fa.min.css" rel="stylesheet" />
+<link href="http://www.phptravels.net/assets/css/animate.min.css" rel="stylesheet" />
+<script src="http://www.phptravels.net/assets/include/ckeditor/ckeditor.js"></script><style>.cke{visibility:hidden;}</style><script src="http://www.phptravels.net/assets/js/jquery-1.11.2.js"></script>
+<link href="http://www.phptravels.net/assets/include/alert/css/alert.css" rel="stylesheet" />
+<link href="http://www.phptravels.net/assets/include/alert/themes/default/theme.css" rel="stylesheet" />
+<script src="http://www.phptravels.net/assets/include/alert/js/alert.js"></script>
+
+<!---Jquery Form--->
+<script src="http://www.phptravels.net/assets/include/jquery-form/jquery.form.min.js"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries-->
+<!--[if lte IE 8]>
+<script src="http://www.phptravels.net/assets/js/html5shiv.js"></script>
+<script src="http://www.phptravels.net/assets/js/respond.min.js"></script>
+<script src="http://www.phptravels.net/assets/js/excanvas.min.js"></script>
+<![endif]-->
+
+<!-- select2 -->
+<link href="http://www.phptravels.net/assets/include/select2/select2.css" rel="stylesheet" />
+<link href="http://www.phptravels.net/assets/include/select2/select2-default.css" rel="stylesheet" />
+<script src="http://www.phptravels.net/assets/include/select2/select2.min.js"></script>
+<!-- end select2 -->
+
+<style>
+.wrapper .main { margin-top: 55px; } @media screen and (max-width: 480px) { .wrapper .main { margin-top: 100px;  }  }
+</style>
+</head>
+  <body onload="startTime()" class=" pace-running"><div class="pace pace-active"><div class="pace-progress" data-progress-text="94%" data-progress="94" style="transform: translate3d(94.2789%, 0px, 0px);">
+  <div class="pace-progress-inner"></div>
+</div>
+<div class="pace-activity"></div></div>
+    <div class="wrapper">
+      <script>
+  (function ($) {
+    // custom css expression for a case-insensitive contains()
+    jQuery.expr[':'].Contains = function(a,i,m){
+        return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())&gt;=0;
+    };
+
+    function FilterMenu(list) {
+        var input = $(".filtertxt");
+
+        $(input).change( function () {
+            var filter = $(this).val();
+            //console.log(filter);
+            //If search text box contains some text then apply filter list
+            if(filter){
+                //Add open class to parent li item
+                $(list).parent().addClass('open');
+                //Add class in and expand the ul item which is nested li of main ul
+                $(list).addClass('in').prop('aria-expanded', 'true').slideDown();
+
+                //Check if child list items contain the query text. Them make them active
+                $(list).find('li:Contains('+filter+')').addClass('active');
+                //Check if any child list items doesn't contain query text. Remove the active class
+                //So that they are not more highlighted
+                $(list).find('li:not(:Contains('+filter+'))').removeClass('active');
+
+                //Show any ul inside main ul which contains the text.
+                $(list).find('li:Contains('+filter+')').show();
+                //Hide any ul inside main ul which doesn't contains the text.
+                $(list).find('li:not(:Contains('+filter+'))').hide();
+
+                //Filter top level list items to show and hide them.
+                $('#social-sidebar-menu').find('li:Contains('+filter+')').show();
+                $('#social-sidebar-menu').find('li:not(:Contains('+filter+'))').hide();
+
+            }else{
+                //On query text = empty reset all classes and styles to default.
+                $(list).parent().removeClass('open');
+                $(list).removeClass('in').prop('aria-expanded', 'false').slideUp();
+                $(list).find('li').removeClass('active');
+                $('#social-sidebar-menu').find('li').show();
+            }
+        })
+        .keyup( function () {
+            $(this).change();
+        });
+    }
+
+    //ondomready
+    $(function () {
+      FilterMenu($("#social-sidebar-menu ul"));
+    });
+  }(jQuery));
+
+
+</script>
+<!-- BEGIN SIDEBAR-->
+<aside class="social-sidebar">
+  <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 685px;"><div class="social-sidebar-content" style="overflow: hidden; width: auto; height: 685px;">
+    <div class="search-sidebar">
+      <form class="search-sidebar-form has-icon filterform" onsubmit="return false;">
+        <label for="sidebar-query" class="fa fa-search"></label>
+        <input id="sidebar-query" type="text" placeholder="Search" class="search-query filtertxt" />
+      </form>
+    </div>
+    <div class="clearfix"></div>
+    <div class="user text-center">
+      <i class="fa-1x glyphicon glyphicon-user"></i>
+      <span>Super Admin</span>
+    </div>
+    <div class="menu">
+      <div class="menu-content">
+        <ul id="social-sidebar-menu">
+                    <li class="active">
+            <a href="http://www.phptravels.net/" target="_blank">
+              <!-- icon--><i class="fa fa-laptop"></i>
+              <span>Frontend</span>
+            </a>
+          </li>
+          <!-- END ELEMENT MENU-->
+          <!-- BEGIN ELEMENT MENU-->
+                    <li>
+            <a href="http://www.phptravels.net/admin/updates/"><i class="fa fa-refresh"></i>
+            <span>Updates</span><span class="pull-right label label-danger" id="updatescount"></span>
+            </a>
+          </li>
+                              <li>
+            <a href="#menu-ui" data-toggle="collapse" data-parent="#social-sidebar-menu">
+              <!-- icon--><i class="fa fa-cogs"></i>
+              <span>General</span>
+              <!-- arrow--><i class="fa arrow"></i>
+            </a>
+            <!-- BEGIN SUB-ELEMENT MENU-->
+            <ul id="menu-ui" class="collapse wow fadeIn animated">
+              <li> <a href="http://www.phptravels.net/admin/settings/">Settings</a> </li>
+              <!-- <li>
+                <a href="http://www.phptravels.net/admin/settings/api/">API Settings</a>
+                </li> -->
+              <li>
+                <a href="http://www.phptravels.net/admin/settings/modules/">Modules</a>
+              </li>
+              <li>
+                <a href="http://www.phptravels.net/admin/settings/currencies/">Currencies</a>
+              </li>
+              <li>
+                <a href="http://www.phptravels.net/admin/settings/paymentgateways/">Payment Gateways</a>
+              </li>
+              <li>
+                <a href="http://www.phptravels.net/admin/settings/social/">Social Connections</a>
+              </li>
+              <li>
+                <a href="http://www.phptravels.net/admin/settings/widgets/">Widgets</a>
+              </li>
+              <li>
+                <a href="http://www.phptravels.net/admin/settings/sliders/">Sliders</a>
+              </li>
+              <li>
+                <a href="http://www.phptravels.net/admin/templates/email/">Email Templates</a>
+              </li>
+              <li>
+                <a href="http://www.phptravels.net/admin/backup/">BackUp</a>
+              </li>
+            </ul>
+            <!-- END SUB-ELEMENT MENU-->
+          </li>
+                    <!-- END ELEMENT MENU-->
+          <li>
+            <a data-toggle="collapse" data-parent="#social-sidebar-menu" href="#ACCOUNTS"><i class="glyphicon glyphicon-user"></i>
+            <span>Accounts</span><i class="fa arrow"></i>
+            </a>
+            <ul id="Accounts" class="collapse wow fadeIn animated">
+                            <li><a href="http://www.phptravels.net/admin/accounts/admins/">Admins</a></li>
+                            <li><a href="http://www.phptravels.net/admin/accounts/suppliers/">Suppliers</a></li>
+              <li><a href="http://www.phptravels.net/admin/accounts/customers/">Customers</a></li>
+              <li><a href="http://www.phptravels.net/admin/accounts/guest/">Guest Customers</a></li>
+            </ul>
+          </li>
+          <!-- BEGIN ELEMENT MENU-->
+          <li>
+            <a href="#CMS" data-toggle="collapse" data-parent="#social-sidebar-menu">
+              <!-- icon--><i class="fa fa-list-alt"></i>
+              <span>CMS</span>
+              <!-- arrow--><i class="fa arrow"></i>
+            </a>
+            <!-- BEGIN SUB-ELEMENT MENU-->
+            <ul id="CMS" class="collapse wow fadeIn animated">
+              <li>
+                <a href="http://www.phptravels.net/admin/cms">Pages</a>
+              </li>
+              <li>
+                <a href="http://www.phptravels.net/admin/cms/menus/manage">Menu</a>
+              </li>
+            </ul>
+          </li>
+                              <li>
+            <a href="#Cars" data-toggle="collapse" data-parent="#social-sidebar-menu">
+            <i class="fa fa-car"></i>            <span>Cars</span>
+            <i class="fa arrow"></i>
+            </a>
+            <ul id="Cars" class="collapse  wow fadeIn animated">
+              <li><a href="http://www.phptravels.net/admin/cars/"> Cars</a></li><li class="divider"></li><li><a href="http://www.phptravels.net/admin/cars/extras/"> Extras</a></li><li><a href="http://www.phptravels.net/admin/cars/settings/"> Cars Settings</a></li>            </ul>
+          </li>
+                    <li>
+            <a href="#Blog" data-toggle="collapse" data-parent="#social-sidebar-menu">
+            <i class="glyphicon glyphicon-th-large"></i>            <span>Blog</span>
+            <i class="fa arrow"></i>
+            </a>
+            <ul id="Blog" class="collapse  wow fadeIn animated">
+              <li><a href="http://www.phptravels.net/admin/blog/"> Posts</a></li><li><a href="http://www.phptravels.net/admin/blog/category/"> Blog Categories</a></li><li class="divider"></li><li><a href="http://www.phptravels.net/admin/blog/settings/"> Blog Settings</a></li>            </ul>
+          </li>
+                    <li>
+            <a href="#Hotels" data-toggle="collapse" data-parent="#social-sidebar-menu">
+            <i class="fa fa-building-o"></i>            <span>Hotels</span>
+            <i class="fa arrow"></i>
+            </a>
+            <ul id="Hotels" class="collapse  wow fadeIn animated">
+              <li><a href="http://www.phptravels.net/admin/hotels/">Hotels</a></li><li><a href="http://www.phptravels.net/admin/hotels/rooms/"> Rooms</a></li><li><a href="http://www.phptravels.net/admin/hotels/extras/"> Extras</a></li><li><a href="http://www.phptravels.net/admin/hotels/reviews/"> Reviews</a></li><li><a href="http://www.phptravels.net/admin/hotels/settings/"> Hotels Settings</a></li>            </ul>
+          </li>
+                    <li>
+            <a href="#Flights" data-toggle="collapse" data-parent="#social-sidebar-menu">
+            <i class="fa fa-plane"></i>            <span>Flights</span>
+            <i class="fa arrow"></i>
+            </a>
+            <ul id="Flights" class="collapse  wow fadeIn animated">
+              <li><a href="http://www.phptravels.net/admin/flights/">Flights Slider</a></li>            </ul>
+          </li>
+                    <li>
+            <a href="#Tours" data-toggle="collapse" data-parent="#social-sidebar-menu">
+            <i class="fa fa-suitcase"></i>            <span>Tours</span>
+            <i class="fa arrow"></i>
+            </a>
+            <ul id="Tours" class="collapse  wow fadeIn animated">
+              <li><a href="http://www.phptravels.net/admin/tours/"> Tours</a></li><li><a href="http://www.phptravels.net/admin/tours/add/"> Add New</a></li><li><a href="http://www.phptravels.net/admin/tours/extras/"> Extras</a></li><li><a href="http://www.phptravels.net/admin/tours/reviews/"> Reviews</a></li><li><a href="http://www.phptravels.net/admin/tours/settings/"> Settings</a></li>            </ul>
+          </li>
+                              <li>
+            <a data-toggle="collapse" data-parent="#social-sidebar-menu" href="#SPECIAL_OFFERS"><i class="fa fa-gift"></i>
+            <span>Offers</span><i class="fa arrow"></i>
+            </a>
+            <ul id="SPECIAL_OFFERS" class="collapse  wow fadeIn animated">
+              <li><a href="http://www.phptravels.net/admin/offers/">Manage Offers</a></li>
+              <li><a href="http://www.phptravels.net/admin/offers/settings/">Offers Settings</a></li>
+            </ul>
+          </li>
+                    <li>
+            <a href="http://www.phptravels.net/admin/coupons/"><i class="fa fa-asterisk"></i>
+            <span>Coupons</span>
+            </a>
+          </li>
+                              <li>
+          <a href="http://www.phptravels.net/admin/locations"><i class="fa fa-map-marker"></i>
+          <span>Locations</span><span class="pull-right label label-danger" id=""></span>
+          </a>
+          </li>
+                                         <li>
+            <a href="http://www.phptravels.net/admin/newsletter/"><i class="fa fa-envelope"></i>
+            <span>Newsletter</span><span class="pull-right label label-danger" id=""></span>
+            </a>
+          </li>
+                               <li>
+            <a href="http://www.phptravels.net/admin/bookings/"><i class="fa fa-list"></i>
+            <span>Bookings</span><span class="pull-right label label-danger" id=""></span>
+            </a>
+          </li>
+                  </ul>
+      </div>
+    </div>
+    <!-- END MENU SECTION-->
+  </div><div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 685px;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+</aside>
+<!-- END SIDEBAR-->      <header>
+    <!-- BEGIN NAVBAR-->
+  <input type="hidden" id="sidebarclass" class="" />
+  <nav role="navigation" class="navbar navbar-fixed-top navbar-super social-navbar">
+    <div class="navbar-header">
+      <a href="http://www.phptravels.net/admin" class="navbar-brand">
+      <i class="fa fa-inbox light"></i>
+      <span>Dashboard</span>
+      </a>
+    </div>
+    <div class="navbar-toggle navtogglebtn"><i class="fa fa-align-justify"></i>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="dropdown navbar-super-fw hidden-xs">
+          <a>
+            <span>
+              <script> function startTime() { var today=new Date(); var h=today.getHours(); var m=today.getMinutes(); var s=today.getSeconds(); m=checkTime(m); s=checkTime(s); document.getElementById('txt').innerHTML=h+":"+m+":"+s; t=setTimeout(function(){startTime()},500); } function checkTime(i) { if (i&lt;10) { i="0" + i; } return i; } </script>
+              <strong>
+                
+                <div class="pull-left  wow fadeInLeft animated" id="txt">2:18:32</div>
+              </strong>
+               | 
+              <small class="pull-right wow fadeInRight animated">
+                <script> var tD = new Date(); var datestr =  tD.getDate(); document.write(""+datestr+""); </script>3 <script type="text/javascript"> var d=new Date(); var weekday=new Array("","","","","","", ""); var monthname=new Array("January","February","March","April","May","June","July","August","September","Octobar","November","December"); document.write(monthname[d.getMonth()] + " "); </script>November 
+                <script> var tD = new Date(); var datestr = tD.getFullYear(); document.write(""+datestr+""); </script>2017
+              </small>
+            </span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- END DROPDOWN MESSAGES-->
+        <li class="divider-vertical"></li>
+        <!-- BEGIN EXTRA DROPDOWN-->
+        <li class="dropdown">
+          <a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="0" class="dropdown-toggle"><i class="fa fa-caret-down fa-lg"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="http://www.phptravels.net/admin/profile/"><i class="glyphicon glyphicon-user"></i> My Profile</a>
+            </li>
+            <li>
+              <a href="http://www.phptravels.net/admin/logout"><i class="fa fa-sign-out"></i> Log Out</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="//phptravels.org/submitticket.php?step=2&amp;deptid=1" target="_blank"><i class="fa fa-info"></i> Help</a>
+            </li>
+          </ul>
+        </li>
+        <!-- END EXTRA DROPDOWN-->
+      </ul>
+            <!--<div class="nav-indicators">
+        <ul class="nav navbar-nav navbar-right nav-indicators-body">
+          <li class="dropdown nav-notifications">
+            <a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="0" class="dropdown-toggle">
+            <span class="badge notifyRevCount"></span><i class="fa fa-comments fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu revdropdown">
+              <li class="nav-notifications-header revnotifyHeader">
+                <a tabindex="-1" href="javascript:void(0)">You have <strong><span class="notifyRevCount"></span></strong> Pending Reviews</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown nav-messages">
+            <a href="javascript:void(0)" data-toggle="dropdown" data-hover="dropdown" data-delay="0" class="dropdown-toggle">
+            <span class="badge notifyAccountsCount"></span><i class="fa fa-user fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu accountsdropdown">
+              <li class="nav-messages-header accountsnotifyHeader">
+                <a tabindex="-1" href="javascript:void(0)">You have <strong><span class="notifyAccountsCount"></span></strong> Pending Supplier(s)</a>
+              </li>
+              <li class="nav-messages-footer">
+                <a tabindex="-1" href="http://www.phptravels.net/admin/accounts/suppliers/">View all Suppliers</a>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown nav-messages">
+            <a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="0" class="dropdown-toggle">
+            <span class="badge notifyBookingsCount"></span><i class="fa fa-file-text fa-lg"></i>
+            </a>
+            <ul class="dropdown-menu bookingsdropdown">
+              <li class="nav-messages-header bookingsnotifyHeader">
+                <a tabindex="-1" href="javascript:void(0)">You have <strong><span class="notifyBookingsCount"></span></strong> new bookings</a>
+              </li>
+              <li class="nav-messages-footer">
+                <a tabindex="-1" href="http://www.phptravels.net/admin/bookings/">View all Bookings</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>-->
+          </div>
+    <!-- /.navbar-collapse-->
+  </nav>
+  <!-- END NAVBAR-->
+</header>
+<script type="text/javascript">
+  $(function(){
+        //setInterval(function(){ getNotifications(); }, 3000);
+    
+    var sideClass = $("#sidebarclass").prop('class');
+    $('body').addClass(sideClass);
+    $(".navtogglebtn").on('click',function(){
+      var sidebar = '';
+      if($('body').hasClass('reduced-sidebar')){
+        sidebar = "";
+      }else{
+        sidebar = "reduced-sidebar";
+      }
+
+      $.post("http://www.phptravels.net/admin/ajaxcalls/reduceSidebar", {sidebar: sidebar}, function(resp){
+
+      });
+
+      });
+
+      });
+
+  function getNotifications(){
+    // $.post("http://www.phptravels.net/admin/ajaxcalls/notifications",{},function(response){
+    //
+    //   var resp = $.parseJSON(response);
+    //   if(resp.totalReviews &gt; 0){
+    //
+    //     $(".notifyRevCount").html(resp.totalReviews);
+    //     $(".revnotifyHeader").show();
+    //     /*if($("li").hasClass("notificationReviews")){
+    //
+    //     }else{
+    //
+    //     }*/
+    //     $(".notificationReviews").remove();
+    //     $(".revnotifyHeader").after(resp.revhtml);
+    //
+    //
+    //   }else{
+    //      $(".revnotifyHeader").hide();
+    //    $(".notifyRevCount").html("");
+    //   }
+    //
+    //   //Supplier notifications
+    //   if(resp.totalAccounts &gt; 0){
+    //     $(".notifyAccountsCount").html(resp.totalAccounts);
+    //     $(".accountsnotifyHeader").show();
+    //     if($("li").hasClass("notificationAccounts")){
+    //
+    //     }else{
+    //      $(".accountsnotifyHeader").after(resp.accountshtml);
+    //     }
+    //
+    //   }else{
+    //      $(".accountsnotifyHeader").hide();
+    //    $(".notifyAccountsCount").html("");
+    //   }
+    //
+    //  //Booking notifications
+    //   if(resp.totalBookings &gt; 0){
+    //     $(".notifyBookingsCount").html(resp.totalBookings);
+    //     $(".bookingsnotifyHeader").show();
+    //     if($("li").hasClass("notificationBookings")){
+    //
+    //     }else{
+    //      $(".bookingsnotifyHeader").after(resp.bookingshtml);
+    //     }
+    //
+    //   }else{
+    //      $(".bookingsnotifyHeader").hide();
+    //    $(".notifyBookingsCount").html("");
+    //   }
+    //
+    // });
+  }
+</script>
+     <div class="main">
+     <div class="container" id="content">
+<style>
+  td span {width: 100%;font-weight: bold;}
+</style>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Booking Management</div>
+     <div class="panel-body">
+     <link href="http://www.phptravels.net/assets/xcrud/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" /><link href="http://www.phptravels.net/assets/xcrud/plugins/jcrop/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" /><link href="http://www.phptravels.net/assets/xcrud/plugins/timepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" /><link href="http://www.phptravels.net/assets/xcrud/themes/bootstrap/xcrud.css" rel="stylesheet" type="text/css" /><div class="xcrud">
+        <div class="xcrud-container">
+        <div class="xcrud-ajax">
+            <input type="hidden" class="xcrud-data" name="key" value="69b9e0afac7cab70c421c0908386046d5b55fd10" /><input type="hidden" class="xcrud-data" name="orderby" value="pt_bookings.booking_id" /><input type="hidden" class="xcrud-data" name="order" value="desc" /><input type="hidden" class="xcrud-data" name="start" value="0" /><input type="hidden" class="xcrud-data" name="limit" value="50" /><input type="hidden" class="xcrud-data" name="instance" value="8b94a23dc222199953f77a2f6565171dc2f66eec" /><input type="hidden" class="xcrud-data" name="task" value="list" />
+        <div class="xcrud-top-actions">
+        <div class="btn-group pull-right">
+                <a href="javascript: multiDelfunc('http://www.phptravels.net/admin/bookings/delMultipleBookings', 'checkboxcls')" style="position: absolute; right: 6px;margin-top: 10px;" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i> Delete Selected</a>
+             
+                        <a href="javascript:;" data-task="print" class="btn btn-default xcrud-in-new-window xcrud-action"><i class="glyphicon glyphicon-print"></i> Print</a><a href="javascript:;" data-task="csv" class="btn btn-default xcrud-in-new-window xcrud-action"><i class="glyphicon glyphicon-file"></i> Export into CSV</a>        </div>
+                 <div class="clearfix"></div>
+        </div>
+
+        <div class="xcrud-list-container">
+        <table class="xcrud-list table table-striped table-hover">
+            <thead>
+                <tr class="xcrud-th"><th><div class="icheckbox_square-grey" style="position: relative;"><input class="all" type="checkbox" value="" id="select_all" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div> </th><th class="xcrud-num">#</th><th data-order="asc" data-orderby="pt_bookings.booking_id" class="xcrud-column xcrud-action xcrud-current xcrud-desc">↓ ID</th><th data-order="desc" data-orderby="pt_bookings.booking_ref_no" class="xcrud-column xcrud-action">Ref No.</th><th data-order="desc" data-orderby="pt_accounts.ai_first_name" class="xcrud-column xcrud-action">Customer</th><th data-order="desc" data-orderby="pt_bookings.booking_type" class="xcrud-column xcrud-action">Module</th><th data-order="desc" data-orderby="pt_bookings.booking_date" class="xcrud-column xcrud-action">Date</th><th data-order="desc" data-orderby="pt_bookings.booking_total" class="xcrud-column xcrud-action">Total</th><th data-order="desc" data-orderby="pt_bookings.booking_amount_paid" class="xcrud-column xcrud-action">Paid</th><th data-order="desc" data-orderby="pt_bookings.booking_remaining" class="xcrud-column xcrud-action">Remaining</th><th data-order="desc" data-orderby="pt_bookings.booking_status" class="xcrud-column xcrud-action">Status</th><th class="xcrud-actions"> </th></tr>            </thead>
+            <tbody>
+                <tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="58" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">1</td><td class="xcrud-current">58</td><td>9058</td><td>Qasim</td><td>hotels</td><td>14/09/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=58&amp;sessid=9058" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/58" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('58','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="58"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="57" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">2</td><td class="xcrud-current">57</td><td>6471</td><td>Qasim</td><td>hotels</td><td>14/09/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=57&amp;sessid=6471" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/57" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('57','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="57"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="56" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">3</td><td class="xcrud-current">56</td><td>5137</td><td>Qasim</td><td>hotels</td><td>14/09/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=56&amp;sessid=5137" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/56" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('56','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="56"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="55" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">4</td><td class="xcrud-current">55</td><td>4376</td><td>Little</td><td>cars</td><td>14/09/2017</td><td>150</td><td>0</td><td>150</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=55&amp;sessid=4376" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/cars/55" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('55','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="55"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="54" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">5</td><td class="xcrud-current">54</td><td>6204</td><td>Johny</td><td>hotels</td><td>14/09/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-warning">Reserved</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=54&amp;sessid=6204" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/54" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('54','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="54"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="53" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">6</td><td class="xcrud-current">53</td><td>3496</td><td>Masood</td><td>hotels</td><td>24/08/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=53&amp;sessid=3496" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/53" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('53','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="53"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="52" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">7</td><td class="xcrud-current">52</td><td>7523</td><td>jhon</td><td>hotels</td><td>24/08/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=52&amp;sessid=7523" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/52" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('52','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="52"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="51" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">8</td><td class="xcrud-current">51</td><td>6982</td><td>masood</td><td>hotels</td><td>24/08/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=51&amp;sessid=6982" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/51" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('51','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="51"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="50" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">9</td><td class="xcrud-current">50</td><td>9458</td><td>fafadsf</td><td>hotels</td><td>17/08/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=50&amp;sessid=9458" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/50" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('50','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="50"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="49" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">10</td><td class="xcrud-current">49</td><td>1679</td><td>Qasim</td><td>hotels</td><td>02/08/2017</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=49&amp;sessid=1679" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/49" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('49','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="49"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="48" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">11</td><td class="xcrud-current">48</td><td>8173</td><td>vbg</td><td>hotels</td><td>03/01/2017</td><td>309</td><td>0</td><td>309</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=48&amp;sessid=8173" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/48" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('48','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="48"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="47" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">12</td><td class="xcrud-current">47</td><td>7504</td><td>Johny</td><td>hotels</td><td>03/01/2017</td><td>139.05</td><td>0</td><td>139.05</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=47&amp;sessid=7504" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/47" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('47','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="47"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="46" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">13</td><td class="xcrud-current">46</td><td>0348</td><td>Johny</td><td>hotels</td><td>03/01/2017</td><td>154.5</td><td>0</td><td>154.5</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=46&amp;sessid=0348" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/46" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('46','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="46"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="45" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">14</td><td class="xcrud-current">45</td><td>3016</td><td>Johny</td><td>hotels</td><td>03/01/2017</td><td>309</td><td>0</td><td>309</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=45&amp;sessid=3016" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/45" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('45','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="45"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="44" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">15</td><td class="xcrud-current">44</td><td>2530</td><td>Johny</td><td>hotels</td><td>03/01/2017</td><td>309</td><td>0</td><td>309</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=44&amp;sessid=2530" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/44" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('44','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="44"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="41" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">16</td><td class="xcrud-current">41</td><td>7209</td><td>Johny</td><td>tours</td><td>29/12/2016</td><td>209</td><td>0</td><td>209</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=41&amp;sessid=7209" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/tours/41" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('41','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="41"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="40" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">17</td><td class="xcrud-current">40</td><td>8714</td><td>Johny</td><td>hotels</td><td>29/12/2016</td><td>139.05</td><td>0</td><td>139.05</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=40&amp;sessid=8714" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/40" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('40','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="40"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="39" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">18</td><td class="xcrud-current">39</td><td>0978</td><td>Johny</td><td>hotels</td><td>29/12/2016</td><td>515</td><td>0</td><td>515</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=39&amp;sessid=0978" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/39" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('39','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="39"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="38" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">19</td><td class="xcrud-current">38</td><td>3187</td><td></td><td>hotels</td><td>28/12/2016</td><td>463.5</td><td>0</td><td>463.5</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=38&amp;sessid=3187" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/38" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('38','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="38"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="37" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">20</td><td class="xcrud-current">37</td><td>7812</td><td></td><td>hotels</td><td>28/12/2016</td><td>515</td><td>0</td><td>515</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=37&amp;sessid=7812" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/37" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('37','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="37"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="36" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">21</td><td class="xcrud-current">36</td><td>6819</td><td></td><td>hotels</td><td>28/12/2016</td><td>515</td><td>0</td><td>515</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=36&amp;sessid=6819" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/36" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('36','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="36"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="35" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">22</td><td class="xcrud-current">35</td><td>8537</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>82.4</td><td>0</td><td>82.4</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=35&amp;sessid=8537" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/35" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('35','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="35"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="34" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">23</td><td class="xcrud-current">34</td><td>0492</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>74.16</td><td>0</td><td>74.16</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=34&amp;sessid=0492" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/34" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('34','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="34"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="33" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">24</td><td class="xcrud-current">33</td><td>0639</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>74.16</td><td>0</td><td>74.16</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=33&amp;sessid=0639" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/33" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('33','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="33"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="32" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">25</td><td class="xcrud-current">32</td><td>7083</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>154.5</td><td>0</td><td>154.5</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=32&amp;sessid=7083" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/32" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('32','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="32"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="31" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">26</td><td class="xcrud-current">31</td><td>0825</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>463.5</td><td>0</td><td>463.5</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=31&amp;sessid=0825" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/31" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('31','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="31"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="30" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">27</td><td class="xcrud-current">30</td><td>7591</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>463.5</td><td>0</td><td>463.5</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=30&amp;sessid=7591" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/30" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('30','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="30"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="29" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">28</td><td class="xcrud-current">29</td><td>9204</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>463.5</td><td>0</td><td>463.5</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=29&amp;sessid=9204" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/29" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('29','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="29"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="28" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">29</td><td class="xcrud-current">28</td><td>8952</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>463.5</td><td>0</td><td>463.5</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=28&amp;sessid=8952" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/28" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('28','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="28"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="27" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">30</td><td class="xcrud-current">27</td><td>7186</td><td>Johny</td><td>hotels</td><td>28/12/2016</td><td>515</td><td>0</td><td>515</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=27&amp;sessid=7186" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/27" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('27','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="27"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="26" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">31</td><td class="xcrud-current">26</td><td>4106</td><td>Johny</td><td>hotels</td><td>27/12/2016</td><td>82.4</td><td>0</td><td>82.4</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=26&amp;sessid=4106" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/26" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('26','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="26"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="25" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">32</td><td class="xcrud-current">25</td><td>4859</td><td>Johny</td><td>hotels</td><td>27/12/2016</td><td>82.4</td><td>0</td><td>82.4</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=25&amp;sessid=4859" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/25" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('25','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="25"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="24" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">33</td><td class="xcrud-current">24</td><td>7289</td><td>Johny</td><td>hotels</td><td>27/12/2016</td><td>515</td><td>0</td><td>515</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=24&amp;sessid=7289" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/24" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('24','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="24"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="23" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">34</td><td class="xcrud-current">23</td><td>9472</td><td>Johny</td><td>hotels</td><td>26/12/2016</td><td>515</td><td>0</td><td>515</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=23&amp;sessid=9472" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/23" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('23','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="23"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="22" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">35</td><td class="xcrud-current">22</td><td>2349</td><td>ateeq</td><td>hotels</td><td>26/12/2016</td><td>198</td><td>0</td><td>198</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=22&amp;sessid=2349" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/22" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('22','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="22"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="21" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">36</td><td class="xcrud-current">21</td><td>4829</td><td>Johny</td><td>hotels</td><td>23/12/2016</td><td>163.2</td><td>0</td><td>163.2</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=21&amp;sessid=4829" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/21" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('21','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="21"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="20" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">37</td><td class="xcrud-current">20</td><td>2096</td><td>Johny</td><td>hotels</td><td>23/12/2016</td><td>163.2</td><td>0</td><td>163.2</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=20&amp;sessid=2096" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/20" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('20','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="20"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="19" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">38</td><td class="xcrud-current">19</td><td>4976</td><td>Johny</td><td>hotels</td><td>23/12/2016</td><td>163.2</td><td>0</td><td>163.2</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=19&amp;sessid=4976" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/19" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('19','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="19"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="18" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">39</td><td class="xcrud-current">18</td><td>8067</td><td>Johny</td><td>hotels</td><td>30/11/2016</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=18&amp;sessid=8067" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/18" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('18','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="18"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="13" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">40</td><td class="xcrud-current">13</td><td>9571</td><td>Johny</td><td>hotels</td><td>30/11/2016</td><td>330</td><td>0</td><td>330</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=13&amp;sessid=9571" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/13" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('13','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="13"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="10" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">41</td><td class="xcrud-current">10</td><td>8943</td><td>Qasim</td><td>hotels</td><td>15/11/2016</td><td>165</td><td>0</td><td>165</td><td><span class="btn btn-xs btn-warning">Reserved</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=10&amp;sessid=8943" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/10" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('10','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="10"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="9" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">42</td><td class="xcrud-current">9</td><td>8453</td><td>Qasim</td><td>hotels</td><td>15/11/2016</td><td>275</td><td>0</td><td>275</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=9&amp;sessid=8453" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/9" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('9','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="9"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="8" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">43</td><td class="xcrud-current">8</td><td>1344</td><td>Johny</td><td>hotels</td><td>28/10/2016</td><td>1650</td><td>0</td><td>1650</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=8&amp;sessid=1344" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/8" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('8','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="8"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="7" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">44</td><td class="xcrud-current">7</td><td>0745</td><td>Johny</td><td>tours</td><td>23/10/2016</td><td>308</td><td>30.8</td><td>277.2</td><td><span class="btn btn-xs btn-success">Paid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=7&amp;sessid=0745" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/tours/7" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('7','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="7"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="6" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">45</td><td class="xcrud-current">6</td><td>8342</td><td>Johny</td><td>hotels</td><td>14/10/2016</td><td>280.5</td><td>28.05</td><td>252.45</td><td><span class="btn btn-xs btn-success">Paid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=6&amp;sessid=8342" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/6" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('6','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="6"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="5" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">46</td><td class="xcrud-current">5</td><td>1082</td><td>Johny</td><td>cars</td><td>31/08/2016</td><td>105</td><td>0</td><td>105</td><td><span class="btn btn-xs btn-warning">Reserved</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=5&amp;sessid=1082" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/cars/5" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('5','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="5"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="4" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">47</td><td class="xcrud-current">4</td><td>0344</td><td>Johny</td><td>tours</td><td>31/08/2016</td><td>618.2</td><td>61.82</td><td>556.38</td><td><span class="btn btn-xs btn-success">Paid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=4&amp;sessid=0344" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/tours/4" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('4','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="4"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="3" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">48</td><td class="xcrud-current">3</td><td>3085</td><td>Johny</td><td>tours</td><td>31/08/2016</td><td>165</td><td>0</td><td>165</td><td><span class="btn btn-xs btn-info">Unpaid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=3&amp;sessid=3085" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/tours/3" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('3','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="3"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-0"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="2" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">49</td><td class="xcrud-current">2</td><td>4037</td><td>Johny</td><td>hotels</td><td>31/08/2016</td><td>143</td><td>0</td><td>143</td><td><span class="btn btn-xs btn-danger">Cancelled</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=2&amp;sessid=4037" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/2" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('2','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="2"><i class="fa fa-times"></i></a></span></td></tr><tr class="xcrud-row xcrud-row-1"><td><div class="icheckbox_square-grey" style="position: relative;"><input class="checkboxcls" type="checkbox" value="1" style="position: absolute; opacity: 0;" /><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td><td class="xcrud-current xcrud-num">50</td><td class="xcrud-current">1</td><td>3349</td><td>ateeq</td><td>hotels</td><td>24/08/2016</td><td>110</td><td>11</td><td>99</td><td><span class="btn btn-xs btn-success">Paid</span></td><td class="xcrud-current xcrud-actions xcrud-fix"><span class="btn-group"><a class="btn btn-default btn-xcrud btn btn-primary" href="http://www.phptravels.net/invoice/?id=1&amp;sessid=3349" title="View Invoice" target="_blank"><i class="fa fa-search-plus"></i></a><a class="btn btn-default btn-xcrud btn btn-warning" href="http://www.phptravels.net/admin/bookings/edit/hotels/1" title="Edit" target="_self"><i class="fa fa-edit"></i></a><a class="btn btn-default btn-xcrud btn-danger" href="javascript: delfunc('1','http://www.phptravels.net/admin/bookings/delBooking')" title="DELETE" target="_self" id="1"><i class="fa fa-times"></i></a></span></td></tr>            </tbody>
+            <tfoot>
+                            </tfoot>
+        </table>
+        </div>
+        <div class="xcrud-nav">
+            <div class="btn-group xcrud-limit-buttons" data-toggle="buttons-radio"><button type="button" class="btn btn-default xcrud-action" data-limit="25">25</button><button type="button" class="btn btn-default active xcrud-action" data-limit="50">50</button><button type="button" class="btn btn-default xcrud-action" data-limit="100">100</button><button type="button" class="btn btn-default xcrud-action" data-limit="all">All</button></div>                        <a class="xcrud-search-toggle btn btn-default" href="javascript:;">Search</a><span class="xcrud-search form-inline" style="display:none;"><input class="xcrud-searchdata xcrud-search-active input-small form-control" name="phrase" data-type="text" style="" data-fieldtype="default" type="text" value="" /><select class="xcrud-data xcrud-columns-select input-small form-control" name="column"><option value="">All fields</option><option value="pt_bookings.booking_id" data-type="int">ID</option><option value="pt_bookings.booking_ref_no" data-type="text">Ref No.</option><option value="pt_accounts.ai_first_name" data-type="text">Customer</option><option value="pt_bookings.booking_type" data-type="text">Module</option><option value="pt_bookings.booking_status" data-type="text">Status</option></select><span class="btn-group"><a class="xcrud-action btn btn-primary" href="javascript:;" data-search="1">Go</a></span></span>            <span class="xcrud-benchmark"><span>Execution time: 0.060 s</span><span>Memory usage: 0.48 MB</span></span>        </div>
+        </div>
+        <div class="xcrud-overlay" style="display: none;"></div>
+    </div>
+</div><script src="http://www.phptravels.net/assets/xcrud/plugins/jquery-ui/jquery-ui.min.js"></script><script src="http://www.phptravels.net/assets/xcrud/plugins/jcrop/jquery.Jcrop.min.js"></script><script src="http://www.phptravels.net/assets/xcrud/plugins/timepicker/jquery-ui-timepicker-addon.js"></script><script src="http://www.phptravels.net/assets/xcrud/plugins/xcrud.js"></script>
+            <script type="text/javascript">
+            &lt;!--
+            
+           	var xcrud_config = {"url":"http:\/\/www.phptravels.net\/xcrud_ajax","editor_url":false,"editor_init_url":false,"force_editor":false,"date_first_day":1,"date_format":"dd.mm.yy","time_format":"HH:mm:ss","lang":{"add":"Add","edit":"Edit","view":"View","remove":"Remove","duplicate":"Duplicate","print":"Print","export_csv":"Export into CSV","search":"Search","go":"Go","reset":"Reset","save":"Save","save_return":"Save &amp; Return","save_new":"Save &amp; New","save_edit":"Save &amp; Edit","return":"Return","modal_dismiss":"Close","add_image":"Add image","add_file":"Add file","exec_time":"Execution time:","memory_usage":"Memory usage:","bool_on":"Yes","bool_off":"No","no_file":"no file","no_image":"no image","null_option":"- none -","total_entries":"Total entries:","table_empty":"Entries not found.","all":"All","deleting_confirm":"Do you really want remove this entry?","undefined_error":"It looks like something went wrong...","validation_error":"Some fields are likely to contain errors. Fix errors and try again.","image_type_error":"This image type is not supported.","unique_error":"Some fields are not unique.","your_position":"Your position","search_here":"Search here...","all_fields":"All fields","choose_range":"- choose range -","next_year":"Next year","next_month":"Next month","today":"Today","this_week_today":"This week up to today","this_week_full":"This full week","last_week":"Last week","last_2weeks":"Last two weeks","this_month":"This month","last_month":"Last month","last_3months":"Last 3 months","last_6months":"Last 6 months","this_year":"This year","last_year":"Last year"},"rtl":0};
+                            
+            --&gt;
+            </script>   </div>
+ </div></div>
+</div>
+</div>
+
+<!-- Bootstrap JS-->
+<script src="http://www.phptravels.net/assets/js/bootstrap.min.js"></script>
+<script src="http://www.phptravels.net/assets/js/bootstrap-hover-dropdown.min.js"></script>
+<script src="http://www.phptravels.net/assets/js/sidebar.js"></script>
+<script src="http://www.phptravels.net/assets/js/panels.js"></script>
+
+
+
+<!-- ckeditor -->
+
+
+<!-- icheck -->
+<script src="http://www.phptravels.net/assets/include/icheck/icheck.min.js"></script>
+<link href="http://www.phptravels.net/assets/include/icheck/square/grey.css" rel="stylesheet" />
+<script>
+var cb, optionSet1;
+
+$(function () {
+    var checkAll = $('input.all');
+    var checkboxes = $('input.checkboxcls');
+
+    $('input').iCheck({
+      checkboxClass: "icheckbox_square-grey",
+    });
+
+    checkAll.on('ifChecked ifUnchecked', function(event) {
+        if (event.type == 'ifChecked') {
+            checkboxes.iCheck('check');
+        } else {
+            checkboxes.iCheck('uncheck');
+        }
+    });
+
+    checkboxes.on('ifChanged', function(event){
+        if(checkboxes.filter(':checked').length == checkboxes.length) {
+            checkAll.prop('checked', 'checked');
+        } else {
+            checkAll.removeProp('checked');
+        }
+        checkAll.iCheck('update');
+    });
+});
+
+$(".radio").iCheck({
+checkboxClass: "icheckbox_square-grey",
+radioClass: "iradio_square-grey"
+});
+</script>
+
+<!-- datepicker -->
+<script src="http://www.phptravels.net/assets/include/datepicker/datepicker.js"></script>
+<link rel="stylesheet" href="http://www.phptravels.net/assets/include/datepicker/datepicker.css" />
+
+<script>
+var fmt = "dd/mm/yyyy";
+if (top.location != location) { top.location.href = document.location.href ; }
+$(function(){ window.prettyPrint &amp;&amp; prettyPrint(); $('.dob').datepicker({format: fmt,autoclose: true}).on('changeDate', function (ev) {
+$(this).datepicker('hide'); });
+$('#dp1').datepicker();
+$('#dp2').datepicker();
+
+// disabling dates
+var nowTemp = new Date();
+var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+var checkin = $('.dpd1').datepicker({
+    format: fmt, 
+    onRender: function(date) { 
+        return date.valueOf() &lt; now.valueOf() ? 'disabled' : ''; 
+    } 
+})
+.on('changeDate', function(ev) {
+    if (ev.date.valueOf() &gt; checkout.date.valueOf()) {
+        var newDate = new Date(ev.date)
+        newDate.setDate(newDate.getDate() + 1); checkout.setValue(newDate); 
+    } 
+    checkin.hide();
+    $('.dpd2')[0].focus(); 
+})
+.data('datepicker'); 
+var checkout = $('.dpd2').datepicker({
+    format: fmt,
+    onRender: function(date) { 
+        return date.valueOf() &lt;= checkin.date.valueOf() ? 'disabled' : ''; 
+    }
+})
+.on('changeDate', function(ev) { 
+    checkout.hide(); 
+})
+.data('datepicker'); 
+
+});
+</script>
+
+<!-- timepicker -->
+<script src="http://www.phptravels.net/assets/include/timepicker/timepicker.js"></script>
+<link rel="stylesheet" href="http://www.phptravels.net/assets/include/timepicker/timepicker.css" />
+<script>
+$(function(){
+$('.timepicker').clockface(); });
+</script>
+
+<!-- dronzone -->
+<link href="http://www.phptravels.net/assets/include/dropzone/dropzone.css" type="text/css" rel="stylesheet" />
+<script src="http://www.phptravels.net/assets/include/dropzone/dropzone.min.js"></script>
+
+
+
+
+<!----Custom functions file---->
+<script src="http://www.phptravels.net/assets/js/funcs.js"></script>
+<!----Custom functions file---->
+
+<!-- pnotify -->
+<script src="http://www.phptravels.net/assets/include/pnotify/pnotify.custom.min.js"></script>
+<link href="http://www.phptravels.net/assets/include/pnotify/pnotify.custom.css" rel="stylesheet" />
+
+
+
+<script>
+$(function() {
+
+$('.chosen-select').select2( { width:'100%', maximumSelectionSize: 1 } );
+
+$(document).ready(function() {
+$(".chosen-multi-select").select2( { width:'100%', } ); }); }); function slideout(){ setTimeout(function(){
+$(".alert-success").fadeOut("slow", function () { });
+$(".alert-danger").fadeOut("slow", function () { }); }, 4000);}
+</script>
+
+<!-- smothwhell starts-->
+<script src="http://www.phptravels.net/assets/include/smoothwheel/smoothwheel.js"></script>
+<!-- smothwhell ends-->
+
+<!-- jQuery slimScroll-->
+<script src="http://www.phptravels.net/assets/js/jquery.slimscroll.min.js"></script>
+<script>
+window.jQuery.ui || document.write('&lt;script src="http://www.phptravels.net/assets/js/jquery.slimscroll.min.js"&gt;&lt;\/script&gt;')
+</script>
+<script src="http://www.phptravels.net/assets/js/wow.min.js"></script>
+<script>
+/*&lt;![CDATA[*/
+$(function() {
+$(".social-sidebar").socialSidebar();
+$('.main').panels();
+});
+/*]]&gt;*/
+</script>
+
+
+
+
+</body></html>

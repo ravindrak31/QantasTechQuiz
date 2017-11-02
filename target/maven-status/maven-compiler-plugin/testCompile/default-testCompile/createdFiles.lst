@@ -1,0 +1,4 @@
+com\Test\QLoyalTest\pages\DemoBookingPage.class
+com\Test\QLoyalTest\steps\DefinitionSteps.class
+com\Test\QLoyalTest\DefinitionTestSuite.class
+com\Test\QLoyalTest\steps\serenity\EndUserSteps.class
